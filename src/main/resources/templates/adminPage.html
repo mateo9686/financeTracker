@@ -1,0 +1,88 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <script
+            src="https://code.jquery.com/jquery-3.4.0.min.js"
+            integrity="sha256-BJeo0qm959uMBGb65z40ejJYGSgR7REI4+CW1fNKwOg="
+            crossorigin="anonymous"></script>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <title>Admin Page</title>
+</head>
+<body>
+<!-- Include _menu.html -->
+<th:block th:include="/_menu"></th:block>
+
+<div class="table-responsive">
+    <table class="table table-striped">
+        <thead>
+        <tr>
+            <th scope="col">#</th>
+            <th scope="col">Email</th>
+            <th scope="col">Email confirmed</th>
+            <th scope="col">Blocked</th>
+            <th scope="col">Last login</th>
+            <th scope="col"></th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="user : ${users}">
+            <th scope="row" th:text="${user.getUserId()}"></th>
+            <td th:text="${user.getUserEmail()}"></td>
+            <td th:text="${user.isActivated()}"></td>
+            <td th:text="${user.isBlocked()}"></td>
+            <td th:text="${user.getLastLogin()}"></td>
+            <td><button th:attr="data-id=${user.getUserId()}, data-email=${user.getUserEmail()}" type="button" class="btn btn-danger btn-sm" data-target="#modal" data-toggle="modal">Delete</button>
+                <a th:href="'/block/' + ${user.getUserId()}"><button type="button" class="btn btn-warning btn-sm">Block</button></a>
+                <a th:href="'/unblock/' + ${user.getUserId()}"><button type="button" class="btn btn-info btn-sm">Unblock</button></a>
+                <a th:href="'/changePassword/' + ${user.getUserId()}"><button type="button" class="btn btn-dark btn-sm">Reset Password</button></a></td>
+
+        </tr>
+        </tbody>
+    </table>
+</div>
+
+<!-- Modal -->
+<div class="modal fade" id="modal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLongTitle">Removing user</h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                <button type="button" class="btn btn-danger" id="remove-button">Yes</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    $(document).ready(function() {
+        var userId = '';
+        var userEmail = '';
+        $('#modal').on('show.bs.modal', function(e) {
+            userId = $(e.relatedTarget).data('id');
+            userEmail = $(e.relatedTarget).data('email');
+            $('.modal-body').text("Do you really want to remove " + userEmail + "?");
+        });
+
+        $('#remove-button').click(function() {
+            var url = "/delete/" + userId;
+            location.href=url;
+        });
+    });
+</script>
+
+<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+</body>
+
+</html>

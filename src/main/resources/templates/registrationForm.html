@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+</head>
+<body>
+<th:block th:include="/_menu"></th:block>
+
+<div class="container" style="margin-top: 20px;">
+    <h2>Please sign up</h2>
+    <form action='/registration' th:object="${user}" method="POST" enctype="utf8">
+        <div class="form-group">
+            <label for="email">Email:</label>
+            <div class="alert alert-danger" role="alert" th:if="${#fields.hasErrors('email')}">
+                <span th:each="err : ${#fields.errors('email')}" th:text="${err}"></span>
+            </div>
+            <input type="text" class="form-control" id="email" placeholder="Enter email" name="email" th:field="*{email}" th:classappend="${#fields.hasErrors('email')} ? 'border border-danger'">
+        </div>
+        <div th:object="${user}" th:remove="tag">
+            <div class="form-group">
+                <label for="password">Password:</label>
+                <input type="password" class="form-control" id="password" placeholder="Enter password" name="password" th:field="*{password}" th:classappend="${#fields.hasErrors('global')} ? 'border border-danger'">
+            </div>
+            <div class="alert alert-danger" role="alert" th:if="${#fields.hasErrors('global')}">
+                <span th:each="error : ${#fields.errors('global')}" th:text="${error}"></span>
+            </div>
+            <div class="form-group">
+                <label for="password_confirm">Confirm password:</label>
+                <input type="password" class="form-control" id="password_confirm" placeholder="Confirm password" name="password_confirm" th:field="*{matchingPassword}" th:classappend="${#fields.hasErrors('global')} ? 'border border-danger'">
+            </div>
+        </div>
+        <button type="submit" class="btn btn-info">Sign up</button>
+    </form>
+</div>
+
+<script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+</body>
+</html>
